@@ -4,9 +4,10 @@ var userClickedPattern = [];
 var	level = 0;
 var started = false;
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("click", function(event) {
 	if (started == false)
 	{
+		startOver();
 		nextSequence();
 		started = true;
 	}
@@ -14,6 +15,8 @@ document.addEventListener("keydown", function(event) {
 
 for(var i = 0; i < 4; i++) {
 	document.querySelectorAll(".btn")[i].addEventListener("click", function() {
+		if (started != true)
+			return ;
 		var userChosenColour = this.id;
 		playSound(userChosenColour);
 		animatePress(userChosenColour);
@@ -25,10 +28,12 @@ for(var i = 0; i < 4; i++) {
 			setTimeout(function() {
 				document.querySelector("body").classList.toggle("game-over");
 			}, 200);
-			document.querySelector("h1").textContent = "Game Over, Press Any Key to Restart";
-			startOver();
+			document.querySelector("h1").textContent = "Game Over, Click everywhere to Restart";
+			setTimeout(function() {
+				started = false;
+			}, 500);
 		}
-		if (userClickedPattern.length === gamePattern.length && started == true) {
+		if (userClickedPattern.length === gamePattern.length) {
 			setTimeout(function() {
 				nextSequence();
 			}, 500);
@@ -66,5 +71,4 @@ function startOver() {
 	level = 0;
 	gamePattern = [];
 	userClickedPattern = [];
-	started = false;
 }
