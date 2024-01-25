@@ -4,19 +4,15 @@ var userClickedPattern = [];
 var	level = 0;
 var started = false;
 
-document.addEventListener("click", function(event) {
-	if (started == false)
-	{
-		startOver();
-		nextSequence();
-		started = true;
-	}
-});
-
 for(var i = 0; i < 4; i++) {
 	document.querySelectorAll(".btn")[i].addEventListener("click", function() {
-		if (started != true)
+		if (started == false)
+		{
+			startOver();
+			started = true;
+			nextSequence();
 			return ;
+		}
 		var userChosenColour = this.id;
 		playSound(userChosenColour);
 		animatePress(userChosenColour);
@@ -24,16 +20,14 @@ for(var i = 0; i < 4; i++) {
 		console.log(userClickedPattern);
 		if (userChosenColour !== gamePattern[userClickedPattern.length - 1]) {
 			playSound("wrong");
+			document.querySelector("h1").textContent = "Game Over, Click any Button to Restart";
+			started = false;
 			document.querySelector("body").classList.toggle("game-over");
 			setTimeout(function() {
 				document.querySelector("body").classList.toggle("game-over");
 			}, 200);
-			document.querySelector("h1").textContent = "Game Over, Click everywhere to Restart";
-			setTimeout(function() {
-				started = false;
-			}, 500);
 		}
-		if (userClickedPattern.length === gamePattern.length) {
+		else if (userClickedPattern.length === gamePattern.length) {
 			setTimeout(function() {
 				nextSequence();
 			}, 500);
